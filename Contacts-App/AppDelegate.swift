@@ -76,6 +76,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+}
 
+extension AppDelegate {
+    func fetchAllContacts(onSuccess: @escaping ([ContactsEntity]?) -> Void) {
+        let context = persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ContactsEntity.fetchRequest()) as? [ContactsEntity]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+            onSuccess(nil)
+        }
+    }
+    
+    ///Add new student
+    func addContacts(firstName: String, lastName: String, phone: Int32, email: String, dob: String) {
+        let context = persistentContainer.viewContext
+        let newContact = ContactsEntity(context: context)
+        newContact.firstName = firstName
+        newContact.lastName = lastName
+        newContact.phone = phone
+        newContact.email = email
+        newContact.dob = dob
+        do {
+            try context.save()
+        } catch {
+            print("error-Saving data")
+        }
+    }
+    
+    func getContact(firstName: String, lastName: String, phone: Int16, email: String, dob: String, onSuccess: @escaping (ContactsEntity?) -> Void) {
+        fetchAllContacts { allContacts in
+            if let allContacts, let contact = allContacts.first(where: { $0.phone == phone }) {
+                onSuccess(contact)
+            } else {
+                onSuccess(nil)
+            }
+        }
+    }
 }
 
