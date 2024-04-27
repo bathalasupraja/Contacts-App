@@ -76,6 +76,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+<<<<<<< Updated upstream
 
+=======
+}
+
+extension AppDelegate {
+    func fetchAllContacts(onSuccess: @escaping ([ContactsEntity]?) -> Void) {
+        let context = persistentContainer.viewContext
+        do {
+            let items = try context.fetch(ContactsEntity.fetchRequest()) as? [ContactsEntity]
+            onSuccess(items)
+        } catch {
+            print("error-Fetching data")
+            onSuccess(nil)
+        }
+    }
+    
+    ///Add new student
+    func addContacts(firstName: String, lastName: String, phone: Int64, email: String, dob: String, image: UIImage? = nil) {
+        let context = persistentContainer.viewContext
+        let newContact = ContactsEntity(context: context)
+        newContact.firstName = firstName
+        newContact.lastName = lastName
+        newContact.phone = phone
+        newContact.email = email
+        newContact.dob = dob
+        
+        /// Handling image
+        if let image, let data = image.pngData() {
+            let imageString = data.base64EncodedString()
+            newContact.photo = imageString
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            print("error-Saving data")
+        }
+    }
+    
+    func getContact(firstName: String, lastName: String, phone: Int64, email: String, dob: String, onSuccess: @escaping (ContactsEntity?) -> Void) {
+        fetchAllContacts { allContacts in
+            if let allContacts, let contact = allContacts.first(where: { $0.phone == phone }) {
+                onSuccess(contact)
+            } else {
+                onSuccess(nil)
+            }
+        }
+    }
+>>>>>>> Stashed changes
 }
 

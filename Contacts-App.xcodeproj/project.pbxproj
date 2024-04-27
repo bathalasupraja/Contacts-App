@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		360326B62BDB46BC00FF751F /* ContactImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 360326B52BDB46BC00FF751F /* ContactImageTableViewCell.swift */; };
 		3658DC712BDA1C5700842A88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3658DC702BDA1C5700842A88 /* AppDelegate.swift */; };
 		3658DC732BDA1C5700842A88 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3658DC722BDA1C5700842A88 /* SceneDelegate.swift */; };
 		3658DC752BDA1C5700842A88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3658DC742BDA1C5700842A88 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		360326B52BDB46BC00FF751F /* ContactImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImageTableViewCell.swift; sourceTree = "<group>"; };
 		3658DC6D2BDA1C5700842A88 /* Contacts-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Contacts-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3658DC702BDA1C5700842A88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3658DC722BDA1C5700842A88 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +64,13 @@
 				3658DC722BDA1C5700842A88 /* SceneDelegate.swift */,
 				3658DC742BDA1C5700842A88 /* ViewController.swift */,
 				3658DC762BDA1C5700842A88 /* Main.storyboard */,
+<<<<<<< Updated upstream
+=======
+				3658DC8B2BDA2A3400842A88 /* ContactsTableViewCell.swift */,
+				360326B52BDB46BC00FF751F /* ContactImageTableViewCell.swift */,
+				3658DC872BDA28C600842A88 /* AllContactsTableViewCell.swift */,
+				3658DC892BDA294200842A88 /* AddContactsViewController.swift */,
+>>>>>>> Stashed changes
 				3658DC7C2BDA1C5900842A88 /* Assets.xcassets */,
 				3658DC7E2BDA1C5900842A88 /* LaunchScreen.storyboard */,
 				3658DC812BDA1C5900842A88 /* Info.plist */,
@@ -142,7 +151,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3658DC7B2BDA1C5700842A88 /* Contacts_App.xcdatamodeld in Sources */,
+<<<<<<< Updated upstream
 				3658DC752BDA1C5700842A88 /* ViewController.swift in Sources */,
+=======
+				3658DC752BDA1C5700842A88 /* AllContactsViewController.swift in Sources */,
+				3658DC882BDA28C600842A88 /* AllContactsTableViewCell.swift in Sources */,
+				360326B62BDB46BC00FF751F /* ContactImageTableViewCell.swift in Sources */,
+				3658DC8A2BDA294200842A88 /* AddContactsViewController.swift in Sources */,
+>>>>>>> Stashed changes
 				3658DC712BDA1C5700842A88 /* AppDelegate.swift in Sources */,
 				3658DC732BDA1C5700842A88 /* SceneDelegate.swift in Sources */,
 			);
@@ -299,6 +315,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -327,6 +344,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
