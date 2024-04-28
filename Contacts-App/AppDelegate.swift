@@ -76,9 +76,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-<<<<<<< Updated upstream
-
-=======
 }
 
 extension AppDelegate {
@@ -125,6 +122,5 @@ extension AppDelegate {
             }
         }
     }
->>>>>>> Stashed changes
 }
 
