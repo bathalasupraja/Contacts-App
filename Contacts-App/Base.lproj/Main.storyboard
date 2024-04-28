@@ -249,8 +249,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="textField" destination="Cwp-KY-ILd" id="fS1-fP-JRh"/>
-                                            <outlet property="titleLabel" destination="2yh-iY-Xi8" id="EFE-hO-S7s"/>
+                                            <outlet property="nameLabel" destination="2yh-iY-Xi8" id="7P1-jG-MaD"/>
+                                            <outlet property="nameTextField" destination="Cwp-KY-ILd" id="cON-Sb-i6o"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

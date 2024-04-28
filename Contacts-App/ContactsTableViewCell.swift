@@ -19,18 +19,6 @@ class ContactsTableViewCell: UITableViewCell {
     @IBOutlet weak var nameTextField: UITextField!
     
     weak var delegate: ContactsTableViewCellDelegate?
-
-    
-    func prepareWithContacts(_ model: ContactsDataModel, delegate: ContactsTableViewCellDelegate?, indexPath: IndexPath) {
-        self.delegate = delegate
-        nameTextField.delegate = self
-        nameTextField.resignFirstResponder()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-    }
     
     func prepareWithContacts(_ contactsField: ContactsDataModel, delegate: ContactsTableViewCellDelegate?, indexPath: IndexPath) {
        // nameTextField.keyboardType = getKeypadTypeForIndexPath(indexPath)
