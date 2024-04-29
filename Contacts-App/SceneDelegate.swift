@@ -18,16 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        if let phone = UserDefaults.standard.value(forKey: "phone") as? Int32 {
+        if let phone = UserDefaults.standard.value(forKey: "phone") as? Int64 {
             print("createin phone: \(phone)")
             /// Show Home
-            window.rootViewController = AllContactsViewController.create()
-            print("\n>>>> showing Home page")
+            if let controller = AllContactsViewController.create() {
+                let navigationController = UINavigationController(rootViewController: controller)
+                window.rootViewController = navigationController
+            }
         } else {
             /// Show Onboard
             let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "InitialNavigationController") as? UINavigationController
             window.rootViewController = navigationController
-            print("\n>>>> showing allContacts page")
         }
          self.window = window
          window.makeKeyAndVisible()
@@ -62,14 +63,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
-    }
-    
-    func showAllContacts() {
-        /// Show AllContacts
-        let navigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "InitialNavigationController") as? UINavigationController
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
-        print("\n>>>> showing onboard page")
     }
 
 

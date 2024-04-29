@@ -8,7 +8,7 @@
 import UIKit
 
 enum AddContactsFieldTypeEnum {
-    case firstName, lastName, phone, email, dob
+    case photo, firstName, lastName, phone, email, dob
 }
 
 struct ContactsDataModel {
@@ -16,6 +16,7 @@ struct ContactsDataModel {
     var name: String
     var placeholder: String
     var value: String?
+    var image: UIImage? /// Used to store contact image data
 }
 
 
@@ -42,6 +43,7 @@ class AddContactsViewController: UIViewController {
     }
     
     func createContacts() {
+        contacts.append(ContactsDataModel(type: .photo, name: "Photo", placeholder: "Capture Contact photo"))
         contacts.append(ContactsDataModel(type: .firstName, name: "First name", placeholder: "Enter first name."))
         contacts.append(ContactsDataModel(type: .lastName, name: "Last name", placeholder: "Enter last name."))
         contacts.append(ContactsDataModel(type: .phone, name: "Phone", placeholder: "Enter phone number."))
@@ -73,25 +75,23 @@ class AddContactsViewController: UIViewController {
         guard let firstName = getTextForContactsFieldType(.firstName),
         let lastName = getTextForContactsFieldType(.lastName),
         let phone = getTextForContactsFieldType(.phone),
-        let phone = Int32(phone),
+        let phone = Int64(phone),
         let email = getTextForContactsFieldType(.email),
         let dob = getTextForContactsFieldType(.dob)
          else {
             showToast("Please enter valid input", message: "Please check the entered fields.")
             return
         }
-        
+        let image = contacts.first(where: { $0.type == .photo })?.image
         if phone == phone {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                 appDelegate.fetchAllContacts { contacts in
                     if let contacts, !contacts.isEmpty, contacts.first(where: { $0.phone == phone }) != nil {
                         self.showToast("Contact is already saved!", message: "Entered contact is already saved, please try entered new contact")
                     } else {
-                        appDelegate.addContacts(firstName: firstName, lastName: lastName, phone: phone, email: email, dob: dob)
-                        if let controller = AllContactsViewController.create() {
+                        appDelegate.addContacts(firstName: firstName, lastName: lastName, phone: phone, email: email, dob: dob, image: image)
                             UserDefaults.standard.set(phone, forKey: "phone")
-                            self.navigationController?.pushViewController(controller, animated: true)
-                        }
+                            self.navigationController?.popViewController(animated: true)
                     }
                 }
             }
@@ -107,6 +107,17 @@ class AddContactsViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
+    func cellIdentifierAtIndexPath(_ indexPath: IndexPath) -> String {
+        if indexPath.row == 0 {
+            return ContactImageTableViewCell.identifier
+        } else {
+            return ContactsTableViewCell.id
+        }
+    }
+    
+    func cellHeightAtIndexPath(_ indexPath: IndexPath) -> CGFloat {
+        indexPath.row == 0 ? 120 : 70
+    }
 }
 
 extension AddContactsViewController: UITableViewDataSource, UITableViewDelegate {
@@ -115,16 +126,20 @@ extension AddContactsViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ContactsTableViewCell.id, for: indexPath)
-        if let ContactsTableViewCell = cell as? ContactsTableViewCell {
+        let identifier = cellIdentifierAtIndexPath(indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        if let contactsTableViewCell = cell as? ContactsTableViewCell {
             let contactsField = contacts[indexPath.row]
-            ContactsTableViewCell.prepareWithContacts( contactsField, delegate: self, indexPath: indexPath)
+            contactsTableViewCell.prepareWithContacts( contactsField, delegate: self, indexPath: indexPath)
+        } else if let photoCell = cell as? ContactImageTableViewCell {
+            photoCell.delegate = self
+            photoCell.prepare(contacts[indexPath.row])
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        70
+        cellHeightAtIndexPath(indexPath)
     }
 }
 
@@ -136,3 +151,61 @@ extension AddContactsViewController: ContactsTableViewCellDelegate {
     }
 }
 
+// MARK: - Open Camera
+extension AddContactsViewController: ContactImageTableViewCellDelegate {
+    func didTouchImage() {
+        let alert = UIAlertController(title: "Select Image source.", message: "Please select your image source.", preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
+            /// Action - camera
+            self.showImagePicker(.camera)
+        }
+        
+        let galleryAction = UIAlertAction(title: "Gallery", style: .default) { _ in
+            /// Action - gallery
+            self.showImagePicker(.photoLibrary)
+        }
+        alert.addAction(cameraAction)
+        alert.addAction(galleryAction)
+        
+        /// for iPad
+        if let popoverController = alert.popoverPresentationController {
+            /// get the cell
+            if let cell = contactsTableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ContactImageTableViewCell {
+                popoverController.sourceView = cell.cellImageView
+                popoverController.sourceRect = cell.cellImageView.bounds
+            }
+        }
+        
+        self.present(alert, animated: true)
+    }
+    
+    private func showImagePicker(_ source: UIImagePickerController.SourceType) {
+        if UIImagePickerController.isSourceTypeAvailable(source) { /// Check is camera available.
+            var controller = UIImagePickerController()
+            controller.delegate = self
+            controller.sourceType = source
+            controller.allowsEditing = true
+            self.present(controller, animated: true)
+        } else {
+            let alert = UIAlertController(title: "No camera found!", message: "Please check your device camera.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(okAction)
+            self.present(alert, animated: true)
+        }
+    }
+}
+
+// MARK: - Handling Image picking options.
+extension AddContactsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage, let index = contacts.firstIndex(where: { $0.type == .photo }) {
+            contacts[index].image = image
+        }
+        picker.dismiss(animated: true)
+        contactsTableView.reloadData()
+    }
+}

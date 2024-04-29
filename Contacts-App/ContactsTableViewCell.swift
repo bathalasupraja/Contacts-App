@@ -11,7 +11,6 @@ protocol ContactsTableViewCellDelegate: AnyObject {
     func didUpdateText(_ text: String?, tag: Int)
 }
 
-
 class ContactsTableViewCell: UITableViewCell {
     
     static let id = "ContactsTableViewCell"
@@ -20,27 +19,57 @@ class ContactsTableViewCell: UITableViewCell {
     @IBOutlet weak var nameTextField: UITextField!
     
     weak var delegate: ContactsTableViewCellDelegate?
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         nameTextField.delegate = self
         nameTextField.resignFirstResponder()
-        
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
     }
     
     func prepareWithContacts(_ contactsField: ContactsDataModel, delegate: ContactsTableViewCellDelegate?, indexPath: IndexPath) {
-       // nameTextField.keyboardType = getKeypadTypeForIndexPath(indexPath)
+        nameTextField.inputView = getInputViewAtIndexPath(indexPath)
+        nameTextField.keyboardType = getKeypadTypeForIndexPath(indexPath)
         nameLabel.text = contactsField.name
         nameTextField.placeholder = contactsField.placeholder
         nameTextField.text = contactsField.value
         nameTextField.resignFirstResponder()
         self.delegate = delegate
         nameTextField.tag = indexPath.row
+    }
+    
+    func getInputViewAtIndexPath(_ indexPath: IndexPath) -> UIView? {
+        switch indexPath.row {
+        case 5:
+            let datePicker = UIDatePicker()
+            datePicker.preferredDatePickerStyle = .wheels
+            datePicker.addTarget(self, action: #selector(didChangeDate), for: .valueChanged)
+            datePicker.datePickerMode = .date
+            return datePicker
+        default:
+            return nil
+        }
+    }
+    
+    @objc func didChangeDate(_ sender: UIDatePicker) {
+        print(sender.date)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        nameTextField.text = formatter.string(from: sender.date)
+    }
+    
+    func getKeypadTypeForIndexPath(_ indexPath: IndexPath) -> UIKeyboardType {
+        switch indexPath.row {
+        case 0:
+            return .default
+        case 1,2:
+            return .namePhonePad
+        case 3:
+            return .phonePad
+        case 4:
+            return .emailAddress
+        default:
+            return .default
+        }
     }
 }
 
@@ -53,4 +82,3 @@ extension ContactsTableViewCell: UITextFieldDelegate {
         delegate?.didUpdateText(contactsField.text, tag: contactsField.tag)
     }
 }
-
